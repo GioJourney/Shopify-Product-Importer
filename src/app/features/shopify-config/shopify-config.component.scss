@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.section-card__title {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.section-card__intro {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--app-muted);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 650;
+
+  input,
+  ::ng-deep .p-password,
+  ::ng-deep .p-password input {
+    width: 100%;
+  }
+}
+
+.hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--app-muted);
+}
+
+.advanced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-muted);
+
+  &:hover {
+    color: var(--app-text);
+  }
+
+  i {
+    font-size: 11px;
+  }
+}
+
+.advanced-field {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+}
+
+.scope-note--tech {
+  margin-top: 14px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.config-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.test-result {
+  margin-top: 16px;
+}
+
+.block-message {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.scope-note {
+  margin: 8px 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--app-muted);
+}
+
+.scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  &--granted {
+    margin-top: 10px;
+  }
+}

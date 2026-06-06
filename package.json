@@ -1,0 +1,90 @@
+{
+  "name": "shopify-product-importer",
+  "version": "0.1.0",
+  "description": "Desktop importer for Shopify products from Excel/LibreOffice files and local image folders.",
+  "main": "electron/main.js",
+  "author": "Giovanni Loiacono",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "build:renderer": "ng build",
+    "watch:renderer": "ng build --watch --configuration development",
+    "electron": "electron .",
+    "start": "concurrently -k -n ng,electron -c blue,green \"ng serve\" \"wait-on tcp:127.0.0.1:4200 && cross-env ELECTRON_DEV=1 electron .\"",
+    "dev": "npm run start",
+    "pack": "npm run build:renderer && electron-builder --dir",
+    "dist": "npm run build:renderer && electron-builder",
+    "dist:win": "npm run build:renderer && electron-builder --win nsis portable",
+    "dist:linux": "npm run build:renderer && electron-builder --linux AppImage deb",
+    "dist:mac": "npm run build:renderer && electron-builder --mac dmg",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@primeuix/themes": "^2.0.3",
+    "@shopify/admin-api-client": "latest",
+    "chokidar": "latest",
+    "electron-store": "^8.2.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^21.1.8",
+    "rxjs": "^7.8.0",
+    "tslib": "^2.8.0",
+    "xlsx": "latest"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.0",
+    "@angular/cli": "^21.0.0",
+    "@angular/compiler-cli": "^21.0.0",
+    "@eslint/js": "latest",
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "electron": "latest",
+    "electron-builder": "latest",
+    "eslint": "latest",
+    "prettier": "latest",
+    "typescript": "~5.9.0",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "it.giovanniloiacono.shopifyproductimporter",
+    "productName": "Shopify Product Importer",
+    "files": [
+      "electron/**/*",
+      "dist/renderer/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

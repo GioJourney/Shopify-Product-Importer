@@ -1,0 +1,79 @@
+:host {
+  display: block;
+  margin-top: 4px;
+}
+
+.section-card__title {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+.progress {
+  margin-bottom: 18px;
+}
+
+.progress__text {
+  margin: 8px 0 0;
+  color: var(--app-muted);
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+
+  .report {
+    color: var(--app-muted);
+    font-size: 12px;
+  }
+}
+
+.block-message {
+  display: block;
+  margin: 14px 0 6px;
+}
+
+.issues {
+  margin: 0 0 14px;
+  padding-left: 20px;
+  font-size: 13px;
+
+  &--error {
+    color: var(--app-danger, #b42318);
+  }
+
+  &--warn {
+    color: var(--app-warning, #9a6700);
+  }
+}
+
+.raw {
+  margin-top: 18px;
+
+  summary {
+    cursor: pointer;
+    font-weight: 650;
+  }
+
+  pre {
+    margin-top: 12px;
+    min-height: 120px;
+    max-height: 360px;
+    overflow: auto;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--app-bg);
+    border: 1px solid var(--app-border);
+    color: var(--app-ice);
+    line-height: 1.5;
+  }
+}
+
+.placeholder {
+  color: var(--app-muted);
+  margin: 0;
+}

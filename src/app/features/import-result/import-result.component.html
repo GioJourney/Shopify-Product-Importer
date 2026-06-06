@@ -1,0 +1,112 @@
+<p-card styleClass="section-card">
+  <h2 class="section-card__title">{{ i18n.t('resultTitle') }}</h2>
+
+  @if (state.running() && state.progress(); as progress) {
+    <div class="progress">
+      <p-progressbar [value]="state.progressPercent()" />
+      <p class="progress__text">
+        {{ progress.current }}/{{ progress.total }} — {{ progress.title }}
+      </p>
+    </div>
+  }
+
+  @if (result(); as result) {
+    @if (preview(); as preview) {
+      <div class="summary">
+        <p-tag
+          [severity]="preview.valid ? 'success' : 'danger'"
+          [value]="preview.valid ? i18n.t('allGood') : i18n.t('needsFixing')"
+        />
+        <span>{{ i18n.count(preview.totalProducts, 'productSingular', 'productPlural') }}</span>
+        <span>{{ i18n.count(preview.totalVariants, 'variantSingular', 'variantPlural') }}</span>
+        <span>{{ i18n.count(preview.totalRows, 'rowSingular', 'rowPlural') }}</span>
+        @if (result.reportPath) {
+          <span class="report">{{ i18n.t('reportSavedIn') }} {{ result.reportPath }}</span>
+        }
+      </div>
+
+      @if (preview.errors.length) {
+        <p-message
+          severity="error"
+          styleClass="block-message"
+          [text]="i18n.t('errorsBeforeImport')"
+        />
+        <ul class="issues issues--error">
+          @for (error of preview.errors; track $index) {
+            <li>{{ i18n.issue(error) }}</li>
+          }
+        </ul>
+      }
+
+      @if (preview.warnings.length) {
+        <p-message
+          severity="warn"
+          styleClass="block-message"
+          [text]="i18n.t('warningsBeforeImport')"
+        />
+        <ul class="issues issues--warn">
+          @for (warning of preview.warnings; track $index) {
+            <li>{{ i18n.issue(warning) }}</li>
+          }
+        </ul>
+      }
+
+      @if (preview.products.length) {
+        <p-table
+          [value]="preview.products"
+          styleClass="p-datatable-sm"
+          [scrollable]="true"
+          scrollHeight="320px"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>{{ i18n.t('handleColumn') }}</th>
+              <th>{{ i18n.t('titleColumn') }}</th>
+              <th>{{ i18n.t('statusColumn') }}</th>
+              <th>{{ i18n.t('imagesColumn') }}</th>
+              <th>{{ i18n.t('variantsColumn') }}</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr>
+              <td>{{ product.handle }}</td>
+              <td>{{ product.title }}</td>
+              <td>{{ i18n.statusLabel(product.status) }}</td>
+              <td>{{ product.images }}</td>
+              <td>{{ product.variants }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      }
+    }
+
+    @if (result.failed.length) {
+      <p-message severity="error" styleClass="block-message" [text]="i18n.t('failedProducts')" />
+      <p-table [value]="result.failed" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ i18n.t('handleColumn') }}</th>
+            <th>{{ i18n.t('titleColumn') }}</th>
+            <th>{{ i18n.t('reasonColumn') }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.handle }}</td>
+            <td>{{ row.title }}</td>
+            <td>{{ i18n.issue(row.error) }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+
+    <details class="raw">
+      <summary>{{ i18n.t('technicalDetails') }}</summary>
+      <pre>{{ rawJson() }}</pre>
+    </details>
+  } @else {
+    <p class="placeholder">
+      {{ i18n.t('emptyResult') }}
+    </p>
+  }
+</p-card>

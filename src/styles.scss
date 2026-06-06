@@ -1,0 +1,59 @@
+@use 'primeicons/primeicons.css';
+
+:root {
+  color-scheme: dark;
+
+  --app-bg: #061826;
+  --app-deep: #082742;
+  --app-surface: #111c26;
+  --app-petrol: #0b3d4a;
+  --app-primary: #00a6d6;
+  --app-success: #95bf47;
+  --app-success-dark: #5e8e3e;
+  --app-ice: #c7e8f3;
+  --app-text: #f7fafc;
+  --app-muted: #b9cad4;
+  --app-danger: #ff6b6b;
+  --app-warning: #f4b740;
+  --app-border: rgba(199, 232, 243, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+::selection {
+  background: rgba(0, 166, 214, 0.35);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--app-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--app-petrol);
+  border-radius: 999px;
+  border: 2px solid var(--app-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--app-primary);
+}

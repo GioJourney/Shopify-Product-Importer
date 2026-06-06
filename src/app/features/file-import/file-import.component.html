@@ -1,0 +1,51 @@
+<p-card styleClass="section-card">
+  <h2 class="section-card__title">{{ i18n.t('stepFilesTitle') }}</h2>
+  <p class="section-card__intro">
+    {{ i18n.t('stepFilesIntro') }}
+  </p>
+
+  <div class="picker-row">
+    <p-button [label]="i18n.t('chooseExcel')" icon="pi pi-file-excel" (onClick)="selectExcel()" />
+    <span class="path" [class.path--empty]="!state.excelPath()" [title]="state.excelPath() ?? ''">
+      {{ state.excelPath() ?? i18n.t('noFileSelected') }}
+    </span>
+  </div>
+  <small class="hint">{{ i18n.t('excelHint') }}</small>
+
+  <div class="picker-row picker-row--spaced">
+    <p-button
+      [label]="i18n.t('chooseImages')"
+      icon="pi pi-folder-open"
+      severity="secondary"
+      (onClick)="selectFolder()"
+    />
+    <span class="path" [class.path--empty]="!state.imageFolder()" [title]="state.imageFolder() ?? ''">
+      {{ state.imageFolder() ?? i18n.t('noFolderSelected') }}
+    </span>
+  </div>
+  <small class="hint">{{ i18n.t('imagesHint') }}</small>
+
+  <div class="actions">
+    <p-button
+      [label]="i18n.t('previewAction')"
+      severity="secondary"
+      [loading]="busy() === 'preview'"
+      [disabled]="!state.canRun() || busy() !== null"
+      (onClick)="preview()"
+    />
+    <p-button
+      [label]="i18n.t('dryRunAction')"
+      severity="secondary"
+      [loading]="busy() === 'dryRun'"
+      [disabled]="!state.canRun() || busy() !== null"
+      (onClick)="run(true)"
+    />
+    <p-button
+      [label]="i18n.t('importAction')"
+      icon="pi pi-cloud-upload"
+      [loading]="busy() === 'import'"
+      [disabled]="!state.canRun() || busy() !== null"
+      (onClick)="run(false)"
+    />
+  </div>
+</p-card>
