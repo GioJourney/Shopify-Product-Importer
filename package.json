@@ -9,6 +9,10 @@
   },
   "license": "MIT",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GioJourney/Shopify-Product-Importer.git"
+  },
   "scripts": {
     "ng": "ng",
     "build:renderer": "ng build",
@@ -94,7 +98,8 @@
         "AppImage",
         "deb"
       ],
-      "category": "Utility"
+      "category": "Utility",
+      "maintainer": "Giovanni Loiacono <giovanni.loiacono182@gmail.com>"
     },
     "mac": {
       "target": [
