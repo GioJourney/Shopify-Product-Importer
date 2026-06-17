@@ -1,0 +1,12 @@
+@if (supported) {
+  <p-button
+    type="button"
+    size="small"
+    severity="secondary"
+    [outlined]="true"
+    [label]="label()"
+    [icon]="icon()"
+    [disabled]="busy()"
+    (onClick)="onClick()"
+  />
+}

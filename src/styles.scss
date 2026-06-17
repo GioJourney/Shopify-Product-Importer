@@ -22,6 +22,14 @@
   box-sizing: border-box;
 }
 
+app-form-field {
+  input,
+  .p-password,
+  .p-password input {
+    width: 100%;
+  }
+}
+
 html,
 body {
   margin: 0;

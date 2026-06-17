@@ -1,5 +1,7 @@
+const { ERROR_CODES, codedError } = require('../shared/error-codes');
+
 function normalizeShopDomain(shopDomain) {
-  if (!shopDomain) throw new Error('Shop domain mancante.');
+  if (!shopDomain) throw codedError(ERROR_CODES.SHOP_DOMAIN_MISSING, 'Shop domain mancante.');
   return shopDomain.replace(/^https?:\/\//, '').replace(/\/$/, '');
 }
 
@@ -25,7 +27,10 @@ class ShopifyGraphqlClient {
 
   async requestToken() {
     if (!this.clientId || !this.clientSecret) {
-      throw new Error('Client ID e Client secret Shopify mancanti.');
+      throw codedError(
+        ERROR_CODES.CREDENTIALS_MISSING,
+        'Client ID e Client secret Shopify mancanti.',
+      );
     }
 
     const response = await fetch(`https://${this.shopDomain}/admin/oauth/access_token`, {
@@ -44,7 +49,11 @@ class ShopifyGraphqlClient {
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || !payload.access_token) {
       const detail = payload.error_description || payload.error || JSON.stringify(payload);
-      throw new Error(`Autenticazione Shopify fallita (client credentials): ${detail}`);
+      throw codedError(
+        ERROR_CODES.SHOPIFY_AUTH_FAILED,
+        `Autenticazione Shopify fallita (client credentials): ${detail}`,
+        { detail },
+      );
     }
 
     const expiresInMs = (Number(payload.expires_in) || 86400) * 1000;

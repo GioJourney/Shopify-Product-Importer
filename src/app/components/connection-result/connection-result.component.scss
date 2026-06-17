@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.test-result {
+  margin-top: 16px;
+}
+
+.block-message {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.scope-note {
+  margin: 8px 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--app-muted);
+
+  &--tech {
+    margin-top: 14px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+.scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  &--granted {
+    margin-top: 10px;
+  }
+}

@@ -1,0 +1,9 @@
+<p-card styleClass="section-card">
+  <h2 class="section-card__title" [class.section-card__title--solo]="!intro()">{{ title() }}</h2>
+
+  @if (intro(); as introText) {
+    <p class="section-card__intro">{{ introText }}</p>
+  }
+
+  <ng-content />
+</p-card>

@@ -9,7 +9,7 @@ import type {
   Progress,
   Settings,
   SettingsInput,
-} from '../models/import.models';
+} from '@types';
 
 @Injectable({ providedIn: 'root' })
 export class ShopifyImporterService {
@@ -31,6 +31,10 @@ export class ShopifyImporterService {
 
   saveSettings(settings: SettingsInput): Promise<{ ok: boolean }> {
     return this.api.saveSettings(settings);
+  }
+
+  clearSettings(): Promise<{ ok: boolean }> {
+    return this.api.clearSettings();
   }
 
   testConnection(): Promise<ConnectionTestResult> {

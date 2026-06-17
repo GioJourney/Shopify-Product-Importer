@@ -1,0 +1,12 @@
+@for (language of i18n.languages; track language.code) {
+  <button
+    type="button"
+    class="language-switch__option"
+    [class.language-switch__option--active]="i18n.isLanguage(language.code)"
+    [attr.aria-pressed]="i18n.isLanguage(language.code)"
+    (click)="i18n.setLanguage(language.code)"
+  >
+    <span>{{ language.shortLabel }}</span>
+    <small>{{ language.label }}</small>
+  </button>
+}

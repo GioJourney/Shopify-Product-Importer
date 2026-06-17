@@ -1,6 +1,4 @@
-<p-card styleClass="section-card">
-  <h2 class="section-card__title">{{ i18n.t('resultTitle') }}</h2>
-
+<app-section-card [title]="i18n.t('resultTitle')">
   @if (state.running() && state.progress(); as progress) {
     <div class="progress">
       <p-progressbar [value]="state.progressPercent()" />
@@ -109,4 +107,4 @@
       {{ i18n.t('emptyResult') }}
     </p>
   }
-</p-card>
+</app-section-card>

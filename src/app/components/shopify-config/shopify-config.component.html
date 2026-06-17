@@ -1,0 +1,100 @@
+<app-section-card [title]="i18n.t('stepConfigTitle')" [intro]="i18n.t('stepConfigIntro')">
+  @if (!encryptionAvailable()) {
+    <p-message severity="warn" styleClass="encryption-warning">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>{{ i18n.t('encryptionUnavailableWarning') }}</span>
+    </p-message>
+  }
+
+  <app-form-field [label]="i18n.t('shopDomainLabel')" controlId="shopDomain">
+    <input
+      pInputText
+      id="shopDomain"
+      autocomplete="off"
+      placeholder="mio-store.myshopify.com"
+      [ngModel]="shopDomain()"
+      (ngModelChange)="shopDomain.set($event)"
+    />
+    <span hint>{{ i18n.t('shopDomainHintPrefix') }} <strong>.myshopify.com</strong>.</span>
+  </app-form-field>
+
+  <app-form-field [label]="i18n.t('clientIdLabel')" controlId="clientId">
+    <input
+      pInputText
+      id="clientId"
+      autocomplete="off"
+      [placeholder]="i18n.t('clientIdPlaceholder')"
+      [ngModel]="clientId()"
+      (ngModelChange)="clientId.set($event)"
+    />
+    <span hint>{{ i18n.t('clientIdHintPrefix') }} <em>API credentials</em>.</span>
+  </app-form-field>
+
+  <app-form-field [label]="i18n.t('clientSecretLabel')" controlId="clientSecret">
+    <p-password
+      inputId="clientSecret"
+      autocomplete="off"
+      placeholder="shpss_..."
+      [feedback]="false"
+      [toggleMask]="true"
+      [ngModel]="clientSecret()"
+      (ngModelChange)="clientSecret.set($event)"
+    />
+    <span hint>
+      {{ hasSecret() ? i18n.t('secretSavedHint') : i18n.t('secretMissingHint') }}
+    </span>
+  </app-form-field>
+
+  <button type="button" class="advanced-toggle" (click)="showAdvanced.set(!showAdvanced())">
+    <i
+      class="pi"
+      [class.pi-chevron-right]="!showAdvanced()"
+      [class.pi-chevron-down]="showAdvanced()"
+    ></i>
+    {{ i18n.t('advancedDetails') }}
+  </button>
+
+  @if (showAdvanced()) {
+    <app-form-field class="advanced-field" [label]="i18n.t('apiVersionLabel')" controlId="apiVersion">
+      <input
+        pInputText
+        id="apiVersion"
+        autocomplete="off"
+        placeholder="2026-04"
+        [ngModel]="apiVersion()"
+        (ngModelChange)="apiVersion.set($event)"
+      />
+      <span hint>{{ i18n.t('apiVersionHint') }}</span>
+    </app-form-field>
+  }
+
+  <div class="config-actions">
+    <p-button [label]="i18n.t('save')" severity="secondary" [loading]="saving()" (onClick)="save()" />
+    <p-button
+      [label]="i18n.t('verifyConnection')"
+      icon="pi pi-check-circle"
+      [outlined]="true"
+      [loading]="testing()"
+      (onClick)="verifyConnection()"
+    />
+    @if (hasSecret()) {
+      <p-button
+        [label]="i18n.t('clearCredentials')"
+        icon="pi pi-trash"
+        severity="danger"
+        [text]="true"
+        [loading]="clearing()"
+        (onClick)="clearCredentials()"
+      />
+    }
+  </div>
+
+  @if (testResult(); as result) {
+    <app-connection-result
+      [result]="result"
+      [missingScopes]="missingScopes()"
+      [requiredScopes]="requiredScopes"
+      [showAdvanced]="showAdvanced()"
+    />
+  }
+</app-section-card>

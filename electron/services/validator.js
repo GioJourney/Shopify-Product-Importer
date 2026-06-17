@@ -1,4 +1,5 @@
 const { REQUIRED_COLUMNS } = require('../shared/columns');
+const { ERROR_CODES, issue } = require('../shared/error-codes');
 const { validateImages } = require('./image-service');
 
 function validateRequiredFields(rows) {
@@ -6,17 +7,33 @@ function validateRequiredFields(rows) {
 
   for (const row of rows) {
     if (!row.handle)
-      errors.push({
-        rowNumber: row.rowNumber,
-        field: 'handle',
-        message: 'Handle mancante o non generabile.',
-      });
+      errors.push(
+        issue(ERROR_CODES.HANDLE_MISSING, 'Handle mancante o non generabile.', {
+          rowNumber: row.rowNumber,
+          field: 'handle',
+        }),
+      );
     if (!row.title)
-      errors.push({ rowNumber: row.rowNumber, field: 'title', message: 'Titolo obbligatorio.' });
+      errors.push(
+        issue(ERROR_CODES.TITLE_REQUIRED, 'Titolo obbligatorio.', {
+          rowNumber: row.rowNumber,
+          field: 'title',
+        }),
+      );
     if (!row.sku)
-      errors.push({ rowNumber: row.rowNumber, field: 'sku', message: 'SKU obbligatorio.' });
+      errors.push(
+        issue(ERROR_CODES.SKU_REQUIRED, 'SKU obbligatorio.', {
+          rowNumber: row.rowNumber,
+          field: 'sku',
+        }),
+      );
     if (row.price === null || row.price < 0)
-      errors.push({ rowNumber: row.rowNumber, field: 'price', message: 'Prezzo non valido.' });
+      errors.push(
+        issue(ERROR_CODES.PRICE_INVALID, 'Prezzo non valido.', {
+          rowNumber: row.rowNumber,
+          field: 'price',
+        }),
+      );
   }
 
   return errors;
@@ -29,11 +46,14 @@ function validateDuplicates(rows) {
   for (const row of rows) {
     if (!row.sku) continue;
     if (skuMap.has(row.sku)) {
-      errors.push({
-        rowNumber: row.rowNumber,
-        field: 'sku',
-        message: `SKU duplicato. Già presente alla riga ${skuMap.get(row.sku)}.`,
-      });
+      const originalRow = skuMap.get(row.sku);
+      errors.push(
+        issue(ERROR_CODES.SKU_DUPLICATE, `SKU duplicato. Già presente alla riga ${originalRow}.`, {
+          rowNumber: row.rowNumber,
+          field: 'sku',
+          params: { row: originalRow },
+        }),
+      );
     } else {
       skuMap.set(row.sku, row.rowNumber);
     }

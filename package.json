@@ -1,6 +1,6 @@
 {
   "name": "shopify-product-importer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Desktop importer for Shopify products from Excel/LibreOffice files and local image folders.",
   "main": "electron/main.js",
   "author": "Giovanni Loiacono",
@@ -18,7 +18,11 @@
     "dist:win": "npm run build:renderer && electron-builder --win nsis portable",
     "dist:linux": "npm run build:renderer && electron-builder --linux AppImage deb",
     "dist:mac": "npm run build:renderer && electron-builder --mac dmg",
+    "release:win": "npm run build:renderer && electron-builder --win nsis --publish always",
+    "release:linux": "npm run build:renderer && electron-builder --linux AppImage deb --publish always",
     "lint": "eslint .",
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -28,27 +32,33 @@
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
     "@primeuix/themes": "^2.0.3",
-    "@shopify/admin-api-client": "latest",
-    "chokidar": "latest",
+    "@shopify/admin-api-client": "^1.1.2",
+    "chokidar": "^5.0.0",
     "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.9",
     "primeicons": "^7.0.0",
     "primeng": "^21.1.8",
     "rxjs": "^7.8.0",
     "tslib": "^2.8.0",
-    "xlsx": "latest"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
+    "@angular-eslint/schematics": "^21.4.0",
     "@angular/build": "^21.0.0",
     "@angular/cli": "^21.0.0",
     "@angular/compiler-cli": "^21.0.0",
-    "@eslint/js": "latest",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "^21.4.0",
     "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
-    "electron": "latest",
-    "electron-builder": "latest",
-    "eslint": "latest",
-    "prettier": "latest",
+    "electron": "^42.3.2",
+    "electron-builder": "^26.8.1",
+    "eslint": "^10.4.1",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.8.3",
     "typescript": "~5.9.0",
+    "typescript-eslint": "^8.60.1",
+    "vitest": "^4.1.8",
     "wait-on": "^8.0.1"
   },
   "build": {
@@ -62,6 +72,13 @@
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "GioJourney",
+        "repo": "Shopify-Product-Importer"
+      }
+    ],
     "asar": true,
     "win": {
       "target": [

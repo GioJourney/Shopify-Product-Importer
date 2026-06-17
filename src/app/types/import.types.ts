@@ -1,16 +1,4 @@
-export interface Settings {
-  shopDomain: string;
-  apiVersion: string;
-  clientId: string;
-  hasSecret: boolean;
-}
-
-export interface SettingsInput {
-  shopDomain: string;
-  apiVersion: string;
-  clientId: string;
-  clientSecret: string;
-}
+import type { IssueDescriptor, ImportIssue } from './issue.types';
 
 export interface PreviewProduct {
   handle: string;
@@ -18,12 +6,6 @@ export interface PreviewProduct {
   status: string;
   images: number;
   variants: number;
-}
-
-export interface ImportIssue {
-  rowNumber?: number;
-  field?: string;
-  message: string;
 }
 
 export interface PreviewResult {
@@ -45,7 +27,7 @@ export interface ImportedProduct {
 export interface FailedProduct {
   handle: string;
   title: string;
-  error: string;
+  error: IssueDescriptor | string;
 }
 
 export interface ImportResult {
@@ -55,14 +37,6 @@ export interface ImportResult {
   imported: ImportedProduct[];
   failed: FailedProduct[];
   reportPath: string | null;
-}
-
-export interface ConnectionTestResult {
-  ok: boolean;
-  shopName?: string;
-  shopDomain?: string;
-  scopes?: string[];
-  error?: string;
 }
 
 export interface Progress {

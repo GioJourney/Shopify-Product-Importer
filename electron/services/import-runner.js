@@ -5,6 +5,7 @@ const { validateRows } = require('./validator');
 const { groupRowsByProduct } = require('./product-grouper');
 const { createProductWithVariantsAndImages } = require('../shopify/product-service');
 const { clearTokenCache } = require('../shopify/graphql-client');
+const { serializeError } = require('../shared/error-codes');
 
 function ensureReportsFolder(baseFolder) {
   const reportsFolder = path.join(baseFolder, 'reports');
@@ -14,7 +15,10 @@ function ensureReportsFolder(baseFolder) {
 
 function writeReport(baseFolder, result) {
   const reportsFolder = ensureReportsFolder(baseFolder);
-  const filePath = path.join(reportsFolder, `import-report-${new Date().toISOString().replace(/[:.]/g, '-')}.json`);
+  const filePath = path.join(
+    reportsFolder,
+    `import-report-${new Date().toISOString().replace(/[:.]/g, '-')}.json`,
+  );
   fs.writeFileSync(filePath, JSON.stringify(result, null, 2), 'utf8');
   return filePath;
 }
@@ -36,12 +40,15 @@ async function previewImport({ excelPath, imageFolder }) {
       title: product.title,
       status: product.status,
       images: product.images.length,
-      variants: product.variants.length
-    }))
+      variants: product.variants.length,
+    })),
   };
 }
 
-async function runImport({ excelPath, imageFolder, settings, dryRun = false }, onProgress = () => {}) {
+async function runImport(
+  { excelPath, imageFolder, settings, dryRun = false },
+  onProgress = () => {},
+) {
   const preview = await previewImport({ excelPath, imageFolder });
   if (!preview.valid) {
     return { ok: false, dryRun, preview, imported: [], failed: [], reportPath: null };
@@ -56,8 +63,6 @@ async function runImport({ excelPath, imageFolder, settings, dryRun = false }, o
     return result;
   }
 
-  // Mint a fresh token for this run so newly granted app scopes take effect
-  // without restarting the app (tokens are otherwise cached for ~24h).
   clearTokenCache();
 
   const imported = [];
@@ -68,10 +73,14 @@ async function runImport({ excelPath, imageFolder, settings, dryRun = false }, o
     onProgress({ current: index + 1, total: products.length, title: product.title });
 
     try {
-      const shopifyProduct = await createProductWithVariantsAndImages({ settings, product, imageFolder });
+      const shopifyProduct = await createProductWithVariantsAndImages({
+        settings,
+        product,
+        imageFolder,
+      });
       imported.push({ handle: product.handle, title: product.title, shopifyProduct });
     } catch (error) {
-      failed.push({ handle: product.handle, title: product.title, error: error.message });
+      failed.push({ handle: product.handle, title: product.title, error: serializeError(error) });
     }
   }
 

@@ -1,0 +1,52 @@
+name: Release
+
+# Builds Windows + Linux installers and publishes them to a GitHub release
+# whenever a version tag (e.g. v1.0.0) is pushed. The tag must match the
+# "version" field in package.json so the auto-updater can detect new releases.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: {}
+
+# Required so the built-in GITHUB_TOKEN can create/upload the release.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: '--win' # nsis (auto-update) + portable, per package.json build.win.target
+          - os: ubuntu-latest
+            platform: '--linux' # AppImage (auto-update) + deb
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular renderer
+        run: npm run build:renderer
+
+      - name: Build & publish Electron app
+        run: npx electron-builder ${{ matrix.platform }} --publish always
+        env:
+          # electron-builder reads GH_TOKEN. The built-in token publishes to
+          # THIS repo's releases; it only works if build.publish.owner/repo in
+          # package.json point at this same repository. To publish elsewhere,
+          # replace this with a Personal Access Token secret (repo scope).
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

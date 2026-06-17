@@ -2,18 +2,6 @@
   display: block;
 }
 
-.section-card__title {
-  margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 18px;
-}
-
-.section-card__intro {
-  margin: 0 0 20px;
-  font-size: 13px;
-  color: var(--app-muted);
-}
-
 .picker-row {
   display: grid;
   grid-template-columns: 170px 1fr;

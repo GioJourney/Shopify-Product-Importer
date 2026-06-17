@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import type { ImportResult, Progress } from '../models/import.models';
+import type { ImportResult, Progress } from '@types';
 
 @Injectable({ providedIn: 'root' })
 export class ImportStateService {

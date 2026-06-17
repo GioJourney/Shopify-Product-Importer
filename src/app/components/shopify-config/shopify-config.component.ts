@@ -7,37 +7,30 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
 import { MessageModule } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { ShopifyImporterService } from '../../core/services/shopify-importer.service';
-import type { ConnectionTestResult } from '../../core/models/import.models';
-import { I18nService } from '../../core/services/i18n.service';
-
-const DEFAULT_API_VERSION = '2026-04';
-
-const REQUIRED_SCOPES = [
-  'write_products',
-  'read_products',
-  'write_inventory',
-  'read_inventory',
-  'write_files',
-];
+import { ShopifyImporterService } from '@core/services/shopify-importer.service';
+import type { ConnectionTestResult } from '@types';
+import { I18nService } from '@core/services/i18n.service';
+import { SectionCardComponent } from '@components/section-card/section-card.component';
+import { FormFieldComponent } from '@components/form-field/form-field.component';
+import { ConnectionResultComponent } from '@components/connection-result/connection-result.component';
+import { DEFAULT_API_VERSION, REQUIRED_SCOPES } from '@core/config/shopify.constants';
 
 @Component({
   selector: 'app-shopify-config',
   imports: [
     FormsModule,
-    CardModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    TagModule,
     MessageModule,
+    SectionCardComponent,
+    FormFieldComponent,
+    ConnectionResultComponent,
   ],
   templateUrl: './shopify-config.component.html',
   styleUrl: './shopify-config.component.scss',
@@ -54,7 +47,9 @@ export class ShopifyConfigComponent implements OnInit {
   readonly clientId = signal('');
   readonly clientSecret = signal('');
   readonly hasSecret = signal(false);
+  readonly encryptionAvailable = signal(true);
   readonly saving = signal(false);
+  readonly clearing = signal(false);
   readonly showAdvanced = signal(false);
 
   readonly testing = signal(false);
@@ -80,6 +75,7 @@ export class ShopifyConfigComponent implements OnInit {
     this.apiVersion.set(settings.apiVersion || DEFAULT_API_VERSION);
     this.clientId.set(settings.clientId ?? '');
     this.hasSecret.set(settings.hasSecret);
+    this.encryptionAvailable.set(settings.encryptionAvailable);
   }
 
   async save(): Promise<void> {
@@ -109,6 +105,32 @@ export class ShopifyConfigComponent implements OnInit {
     }
   }
 
+  async clearCredentials(): Promise<void> {
+    this.clearing.set(true);
+    try {
+      await this.importer.clearSettings();
+      this.shopDomain.set('');
+      this.clientId.set('');
+      this.clientSecret.set('');
+      this.apiVersion.set(DEFAULT_API_VERSION);
+      this.testResult.set(null);
+      await this.loadSettings();
+      this.messages.add({
+        severity: 'success',
+        summary: this.i18n.t('credentialsClearedSummary'),
+        detail: this.i18n.t('credentialsClearedDetail'),
+      });
+    } catch (error) {
+      this.messages.add({
+        severity: 'error',
+        summary: this.i18n.t('errorSummary'),
+        detail: error instanceof Error ? this.i18n.issue(error.message) : this.i18n.t('saveFailed'),
+      });
+    } finally {
+      this.clearing.set(false);
+    }
+  }
+
   async verifyConnection(): Promise<void> {
     this.testing.set(true);
     this.testResult.set(null);
@@ -132,7 +154,8 @@ export class ShopifyConfigComponent implements OnInit {
       this.messages.add({
         severity: 'error',
         summary: this.i18n.t('connectionFailedSummary'),
-        detail: error instanceof Error ? this.i18n.issue(error.message) : this.i18n.t('checkCredentials'),
+        detail:
+          error instanceof Error ? this.i18n.issue(error.message) : this.i18n.t('checkCredentials'),
       });
     } finally {
       this.testing.set(false);

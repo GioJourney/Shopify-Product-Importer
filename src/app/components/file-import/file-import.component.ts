@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
-import { ShopifyImporterService } from '../../core/services/shopify-importer.service';
-import { ImportStateService } from '../../core/services/import-state.service';
-import { I18nService } from '../../core/services/i18n.service';
+import { ShopifyImporterService } from '@core/services/shopify-importer.service';
+import { ImportStateService } from '@core/services/import-state.service';
+import { I18nService } from '@core/services/i18n.service';
+import { SectionCardComponent } from '@components/section-card/section-card.component';
 
 @Component({
   selector: 'app-file-import',
-  imports: [CardModule, ButtonModule],
+  imports: [ButtonModule, SectionCardComponent],
   templateUrl: './file-import.component.html',
   styleUrl: './file-import.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

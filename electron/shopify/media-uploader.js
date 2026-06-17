@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { ERROR_CODES, codedError } = require('../shared/error-codes');
 
 const STAGED_UPLOADS_CREATE = `
 mutation stagedUploadsCreate($input: [StagedUploadInput!]!) {
@@ -32,9 +33,9 @@ async function uploadLocalImage(client, filePath) {
         mimeType,
         resource: 'IMAGE',
         httpMethod: 'POST',
-        fileSize
-      }
-    ]
+        fileSize,
+      },
+    ],
   });
 
   const uploadResponse = staged.stagedUploadsCreate;
@@ -53,11 +54,13 @@ async function uploadLocalImage(client, filePath) {
 
   const response = await fetch(target.url, {
     method: 'POST',
-    body: formData
+    body: formData,
   });
 
   if (!response.ok) {
-    throw new Error(`Upload immagine fallito: ${filename}`);
+    throw codedError(ERROR_CODES.IMAGE_UPLOAD_FAILED, `Upload immagine fallito: ${filename}`, {
+      file: filename,
+    });
   }
 
   return target.resourceUrl;

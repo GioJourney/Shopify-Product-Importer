@@ -1,8 +1,11 @@
 function getVariantOptions(row) {
   const options = [];
-  if (row.option1Name && row.option1Value) options.push({ name: row.option1Name, value: row.option1Value });
-  if (row.option2Name && row.option2Value) options.push({ name: row.option2Name, value: row.option2Value });
-  if (row.option3Name && row.option3Value) options.push({ name: row.option3Name, value: row.option3Value });
+  if (row.option1Name && row.option1Value)
+    options.push({ name: row.option1Name, value: row.option1Value });
+  if (row.option2Name && row.option2Value)
+    options.push({ name: row.option2Name, value: row.option2Value });
+  if (row.option3Name && row.option3Value)
+    options.push({ name: row.option3Name, value: row.option3Value });
   return options;
 }
 
@@ -22,7 +25,7 @@ function groupRowsByProduct(rows) {
         seoTitle: row.seoTitle,
         seoDescription: row.seoDescription,
         images: new Set(),
-        variants: []
+        variants: [],
       });
     }
 
@@ -42,13 +45,13 @@ function groupRowsByProduct(rows) {
       weight: row.weight,
       weightUnit: row.weightUnit,
       options: getVariantOptions(row),
-      variantImage: row.variantImage
+      variantImage: row.variantImage,
     });
   }
 
   return Array.from(products.values()).map((product) => ({
     ...product,
-    images: Array.from(product.images)
+    images: Array.from(product.images),
   }));
 }
 

@@ -1,9 +1,4 @@
-<p-card styleClass="section-card">
-  <h2 class="section-card__title">{{ i18n.t('stepFilesTitle') }}</h2>
-  <p class="section-card__intro">
-    {{ i18n.t('stepFilesIntro') }}
-  </p>
-
+<app-section-card [title]="i18n.t('stepFilesTitle')" [intro]="i18n.t('stepFilesIntro')">
   <div class="picker-row">
     <p-button [label]="i18n.t('chooseExcel')" icon="pi pi-file-excel" (onClick)="selectExcel()" />
     <span class="path" [class.path--empty]="!state.excelPath()" [title]="state.excelPath() ?? ''">
@@ -48,4 +43,4 @@
       (onClick)="run(false)"
     />
   </div>
-</p-card>
+</app-section-card>

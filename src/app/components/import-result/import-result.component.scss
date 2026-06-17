@@ -3,12 +3,6 @@
   margin-top: 4px;
 }
 
-.section-card__title {
-  margin-top: 0;
-  margin-bottom: 18px;
-  font-size: 18px;
-}
-
 .progress {
   margin-bottom: 18px;
 }
@@ -16,6 +10,11 @@
 .progress__text {
   margin: 8px 0 0;
   color: var(--app-muted);
+}
+
+.block-message {
+  display: block;
+  margin: 14px 0 6px;
 }
 
 .summary {
@@ -30,11 +29,6 @@
     color: var(--app-muted);
     font-size: 12px;
   }
-}
-
-.block-message {
-  display: block;
-  margin: 14px 0 6px;
 }
 
 .issues {

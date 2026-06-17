@@ -1,12 +1,51 @@
+// @ts-check
 const js = require('@eslint/js');
+const tseslint = require('typescript-eslint');
+const angular = require('angular-eslint');
 
-module.exports = [
+module.exports = tseslint.config(
   {
-    ignores: ['dist/**', 'out-tsc/**', 'release/**', 'node_modules/**', 'src/**', '.angular/**']
+    ignores: ['dist/**', 'out-tsc/**', 'release/**', 'node_modules/**', '.angular/**'],
   },
-  js.configs.recommended,
+
+  // Angular application code (TypeScript)
+  {
+    files: ['src/**/*.ts'],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      ...tseslint.configs.stylistic,
+      ...angular.configs.tsRecommended,
+    ],
+    processor: angular.processInlineTemplates,
+    rules: {
+      '@angular-eslint/directive-selector': [
+        'error',
+        { type: 'attribute', prefix: 'app', style: 'camelCase' },
+      ],
+      '@angular-eslint/component-selector': [
+        'error',
+        { type: 'element', prefix: 'app', style: 'kebab-case' },
+      ],
+      '@angular-eslint/prefer-on-push-component-change-detection': 'error',
+      '@angular-eslint/prefer-standalone': 'error',
+    },
+  },
+
+  // Angular templates (HTML + inline)
+  {
+    files: ['src/**/*.html'],
+    extends: [
+      ...angular.configs.templateRecommended,
+      ...angular.configs.templateAccessibility,
+    ],
+    rules: {},
+  },
+
+  // Electron main/preload code (CommonJS, Node)
   {
     files: ['electron/**/*.js', '*.js'],
+    extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'commonjs',
@@ -20,11 +59,11 @@ module.exports = [
         URLSearchParams: 'readonly',
         FormData: 'readonly',
         Blob: 'readonly',
-        fetch: 'readonly'
-      }
+        fetch: 'readonly',
+      },
     },
     rules: {
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }]
-    }
-  }
-];
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    },
+  },
+);

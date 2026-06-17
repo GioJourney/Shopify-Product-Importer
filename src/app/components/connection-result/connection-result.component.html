@@ -1,0 +1,54 @@
+@if (result(); as result) {
+  @if (result.ok) {
+    <div class="test-result">
+      <p-message
+        [severity]="missingScopes().length ? 'warn' : 'success'"
+        styleClass="block-message"
+        [text]="
+          i18n.t('connectedTo') +
+          ' ' +
+          result.shopName +
+          (result.shopDomain ? ' (' + result.shopDomain + ')' : '')
+        "
+      />
+
+      @if (missingScopes().length) {
+        <p class="scope-note">
+          {{ i18n.t('missingScopesNote') }}
+        </p>
+      } @else {
+        <p class="scope-note">
+          {{ i18n.t('allScopesNote') }}
+        </p>
+      }
+
+      @if (showAdvanced()) {
+        @if (missingScopes().length) {
+          <p class="scope-note scope-note--tech">{{ i18n.t('missingScopes') }}</p>
+          <div class="scopes">
+            @for (scope of missingScopes(); track scope) {
+              <p-tag severity="danger" [value]="scope" />
+            }
+          </div>
+        }
+
+        <p class="scope-note scope-note--tech">{{ i18n.t('scopesStatus') }}</p>
+        <div class="scopes scopes--granted">
+          @for (scope of requiredScopes(); track scope) {
+            <p-tag
+              [severity]="(result.scopes ?? []).includes(scope) ? 'success' : 'secondary'"
+              [value]="scope"
+              [icon]="(result.scopes ?? []).includes(scope) ? 'pi pi-check' : 'pi pi-times'"
+            />
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <p-message
+      severity="error"
+      styleClass="block-message"
+      [text]="result.error ? i18n.issue(result.error) : i18n.t('connectionFallbackError')"
+    />
+  }
+}

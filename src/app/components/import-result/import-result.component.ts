@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CardModule } from 'primeng/card';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { MessageModule } from 'primeng/message';
-import { ShopifyImporterService } from '../../core/services/shopify-importer.service';
-import { ImportStateService } from '../../core/services/import-state.service';
-import { I18nService } from '../../core/services/i18n.service';
+import { ShopifyImporterService } from '@core/services/shopify-importer.service';
+import { ImportStateService } from '@core/services/import-state.service';
+import { I18nService } from '@core/services/i18n.service';
+import { SectionCardComponent } from '@components/section-card/section-card.component';
 
 @Component({
   selector: 'app-import-result',
-  imports: [CardModule, ProgressBarModule, TableModule, TagModule, MessageModule],
+  imports: [ProgressBarModule, TableModule, TagModule, MessageModule, SectionCardComponent],
   templateUrl: './import-result.component.html',
   styleUrl: './import-result.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

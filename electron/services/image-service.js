@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { ERROR_CODES, issue } = require('../shared/error-codes');
 
 const SUPPORTED_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 
@@ -41,12 +42,27 @@ function validateImages(rows, imageFolder) {
 
     for (const fileName of declaredImages) {
       if (!resolveImageFile(imageFolder, fileName)) {
-        errors.push({ rowNumber: row.rowNumber, field: 'image_files', message: `Immagine non trovata: ${fileName}` });
+        errors.push(
+          issue(ERROR_CODES.IMAGE_NOT_FOUND, `Immagine non trovata: ${fileName}`, {
+            rowNumber: row.rowNumber,
+            field: 'image_files',
+            params: { file: fileName },
+          }),
+        );
       }
     }
 
     if (matchedImages.length === 0) {
-      warnings.push({ rowNumber: row.rowNumber, field: 'image_files', message: 'Nessuna immagine trovata per il prodotto/variante.' });
+      warnings.push(
+        issue(
+          ERROR_CODES.NO_IMAGE_FOR_PRODUCT,
+          'Nessuna immagine trovata per il prodotto/variante.',
+          {
+            rowNumber: row.rowNumber,
+            field: 'image_files',
+          },
+        ),
+      );
     }
   }
 

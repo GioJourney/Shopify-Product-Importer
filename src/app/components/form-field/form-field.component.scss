@@ -1,0 +1,12 @@
+:host {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 650;
+}
+
+.hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--app-muted);
+}
