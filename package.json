@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Desktop importer for Shopify products from Excel/LibreOffice files and local image folders.",
   "main": "electron/main.js",
-  "author": "Giovanni Loiacono",
+  "author": {
+    "name": "Giovanni Loiacono",
+    "email": "giovanni.loiacono182@gmail.com"
+  },
   "license": "MIT",
   "private": true,
   "scripts": {
