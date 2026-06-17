@@ -20,12 +20,12 @@ Open the importer, enter your store address (`your-store.myshopify.com`), Client
 
 Four columns are required:
 
-| Column | Notes |
-|---|---|
+| Column   | Notes                                                    |
+| -------- | -------------------------------------------------------- |
 | `handle` | Product handle (auto-generated from the title if empty). |
-| `title` | Product title. |
-| `sku` | Variant SKU — must be unique. |
-| `price` | `24.90` or `24,90` both work. |
+| `title`  | Product title.                                           |
+| `sku`    | Variant SKU — must be unique.                            |
+| `price`  | `24.90` or `24,90` both work.                            |
 
 Many optional columns are supported (`body_html`, `vendor`, `tags`, `status`, options, images, SEO…). See `docs/SHOPIFY_COLUMNS.md`, or start from `docs/shopify-products-template.xlsx`.
 
@@ -64,7 +64,9 @@ Releases are automated: push a `v*` tag (e.g. `v1.0.0`) and GitHub Actions build
 
 ---
 
-## Notes
+## Disclaimer & responsibility
 
-- Creating products is fully supported; update/delete flows are still in progress.
-- Don't commit real credentials, reports, or production spreadsheets.
+This software writes products and images to your live Shopify store. **You are responsible for the data you import.** Always run **Preview** and a **Test without saving** pass first, and start with `DRAFT` products on a small file.
+
+The app is provided "as is", without warranty of any kind. The authors are not liable for any data loss, incorrect imports, or other damage to your store or business resulting from its use. Keep backups of your product data, and never commit real credentials, reports, or production spreadsheets to source control.
+
